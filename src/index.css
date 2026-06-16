@@ -12,29 +12,26 @@ substrate-button button, substrate-button a.btn {
     padding: 0.5rem 2rem;
     cursor: pointer;
     transition: all 0.2s;
-    transform: translateY(1px);
+    transform: translateY(0);
 
-    &:focus {
-        outline: 1px solid;
-    }
+    &:not(:disabled) {
+        &:focus {
+            outline: 1px solid;
+        }
 
-    &:hover {
-        outline: 1px solid;
-        transform: translateY(0);
-    }
+        &:hover {
+            outline: 1px solid;
+            transform: translateY(-1px);
+        }
 
-    &:active {
-        transform: translateY(2px);
+        &:active {
+            transform: translateY(1px);
+        }
     }
 
     &:disabled {
         cursor: not-allowed;
         opacity: 0.4;
-
-        &:hover {
-            transform: translateY(1px);
-            outline-color: transparent;
-        }
     }
 
     &.spinning {
