@@ -19,8 +19,14 @@
       "import": "./dist/client.js",
       "require": "./dist/client.cjs"
     },
-    "./css": "./dist/index.css",
-    "./css/min": "./dist/index.min.css",
+    "./css": {
+      "types": "./dist/css.d.ts",
+      "default": "./dist/index.css"
+    },
+    "./css/min": {
+      "types": "./dist/css.d.ts",
+      "default": "./dist/index.min.css"
+    },
     "./*": {
       "import": "./dist/*.js",
       "require": "./dist/*.cjs"
@@ -31,13 +37,14 @@
     "test": "npm run build && esbuild test/index.ts --bundle | tapout",
     "build-css": "npx lightningcss --nesting --targets '>= 0.25%' src/index.css -o dist/index.css",
     "build-css:min": "npx lightningcss --nesting --minify --targets '>= 0.25%' src/index.css -o dist/index.min.css",
+    "build-css:types": "cp ./types/css.d.ts ./dist/css.d.ts",
     "build-cjs": "esbuild src/*.ts --format=cjs --keep-names --tsconfig=tsconfig.build.json --outdir=./dist --out-extension:.js=.cjs --sourcemap",
     "build-cjs:min": "esbuild src/*.ts --format=cjs --minify --keep-names --tsconfig=tsconfig.build.json --outdir=./dist --out-extension:.js=.min.cjs --sourcemap",
     "build-esm": "esbuild src/*.ts --format=esm --metafile=dist/meta.json --keep-names --tsconfig=tsconfig.build.json --outdir=./dist --sourcemap && tsc --emitDeclarationOnly --project tsconfig.build.json --outDir dist",
     "build-esm:min": "esbuild ./src/*.ts --format=esm --keep-names --bundle --tsconfig=tsconfig.build.json --minify --out-extension:.js=.min.js --outdir=./dist --sourcemap",
     "build-example": "mkdir -p ./public && rm -rf ./public/* && VITE_DEBUG_MODE=staging vite --mode staging --base=\"/button\" build",
     "build-docs": "typedoc ./src/index.ts",
-    "build": "mkdir -p ./dist && rm -rf ./dist/* && npm run build-cjs && npm run build-esm && npm run build-esm:min && npm run build-cjs:min && npm run build-css && npm run build-css:min",
+    "build": "mkdir -p ./dist && rm -rf ./dist/* && npm run build-cjs && npm run build-esm && npm run build-esm:min && npm run build-cjs:min && npm run build-css && npm run build-css:min && npm run build-css:types",
     "start": "vite",
     "toc": "markdown-toc --maxdepth 3 -i README.md",
     "preversion": "npm run lint",
@@ -46,24 +53,22 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@substrate-system/web-component": "^0.0.51"
+    "@substrate-system/web-component": "^0.0.55"
   },
   "devDependencies": {
     "@substrate-system/debug": "^0.9.52",
     "@substrate-system/dom": "^0.1.13",
     "@substrate-system/tapout": "^0.0.37",
     "@substrate-system/tapzero": "^0.10.16",
-    "@typescript-eslint/eslint-plugin": "^8.7.0",
-    "@typescript-eslint/parser": "^8.7.0",
     "auto-changelog": "^2.4.0",
     "browserslist": "^4.28.1",
     "esbuild": "^0.28.0",
-    "eslint": "^8.57.0",
-    "eslint-config-standard": "^17.1.0",
+    "eslint": "^9.39.4",
     "htm": "^3.1.1",
     "lightningcss": "^1.31.1",
     "lightningcss-cli": "^1.31.1",
     "markdown-toc": "^1.2.0",
+    "neostandard": "^0.13.0",
     "preact": "^10.29.0",
     "stylelint": "^17.3.0",
     "stylelint-config-standard": "^40.0.0",
@@ -71,7 +76,7 @@
     "tape-run": "^11.0.0",
     "typedoc": "^0.28.1",
     "typescript": "^6.0.2",
-    "vite": "^8.0.4"
+    "vite": "^8.0.8"
   },
   "author": "nichoth <nichoth@nichoth.com> (https://nichoth.com)",
   "license": "SEE LICENSE IN LICENSE",
