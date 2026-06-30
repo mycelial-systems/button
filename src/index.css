@@ -15,11 +15,7 @@ substrate-button button, substrate-button a.btn {
     transform: translateY(0);
 
     &:not(:disabled) {
-        &:focus {
-            outline: 1px solid;
-        }
-
-        &:hover {
+        &:focus, &:hover, &:focus-visible {
             outline: 1px solid;
             transform: translateY(-1px);
         }
