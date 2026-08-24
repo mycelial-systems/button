@@ -53,7 +53,7 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@substrate-system/web-component": "^0.0.56"
+    "@substrate-system/web-component": "^0.0.58"
   },
   "devDependencies": {
     "@substrate-system/debug": "^0.9.52",
