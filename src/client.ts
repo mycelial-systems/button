@@ -75,13 +75,12 @@ export class SubstrateButton extends WebComponent.create('substrate-button') {
         if (this.hasAttribute('disabled') !== disabledValue) {
             this.toggleAttribute('disabled', disabledValue)
         }
-        if (!disabledValue) {
-            this.button?.removeAttribute('disabled')
-            this.button?.setAttribute('aria-disabled', 'false')
-        } else {
-            this.button?.setAttribute('disabled', '')
-            this.button?.setAttribute('aria-disabled', 'true')
-        }
+        // a spinning button stays disabled until spinning ends
+        this.button?.toggleAttribute(
+            'disabled',
+            disabledValue || this.hasAttribute('spinning')
+        )
+        this.button?.setAttribute('aria-disabled', String(disabledValue))
     }
 
     get type ():string|null {
@@ -107,7 +106,11 @@ export class SubstrateButton extends WebComponent.create('substrate-button') {
         } else {
             this.classList.remove('spinning')
             this.button?.classList.remove('spinning')
-            this.button?.removeAttribute('disabled')
+            // spinning ended: the host's own `disabled` decides
+            this.button?.toggleAttribute(
+                'disabled',
+                this.hasAttribute('disabled')
+            )
             this.removeAttribute('spinning')
         }
     }
@@ -214,13 +217,12 @@ export class SubstrateButton extends WebComponent.create('substrate-button') {
 
     handleChange_disabled (_old:string|null, newValue:string|null) {
         const isDisabled = newValue !== null
-        if (isDisabled) {
-            this.button?.setAttribute('disabled', '')
-            this.button?.setAttribute('aria-disabled', 'true')
-        } else {
-            this.button?.removeAttribute('disabled')
-            this.button?.setAttribute('aria-disabled', 'false')
-        }
+        // a spinning button stays disabled until spinning ends
+        this.button?.toggleAttribute(
+            'disabled',
+            isDisabled || this.hasAttribute('spinning')
+        )
+        this.button?.setAttribute('aria-disabled', String(isDisabled))
     }
 
     handleChange_spinning (_, newValue:boolean) {
@@ -232,7 +234,11 @@ export class SubstrateButton extends WebComponent.create('substrate-button') {
         } else {
             this.classList.remove('spinning')
             this.button?.classList.remove('spinning')
-            this.button?.removeAttribute('disabled')
+            // spinning ended: the host's own `disabled` decides
+            this.button?.toggleAttribute(
+                'disabled',
+                this.hasAttribute('disabled')
+            )
             this.button?.setAttribute('aria-busy', 'false')
         }
     }

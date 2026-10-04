@@ -295,6 +295,94 @@ test('preact: label content updates reactively', t => {
     container.remove()
 })
 
+test('ending spinning keeps a disabled host disabled', async t => {
+    // A save button: disabled while spinning, and still disabled after,
+    // because nothing is left to save. Only `spinning` changes.
+    const container = document.createElement('div')
+    document.body.appendChild(container)
+    render(html`
+        <${SubstrateButton.TAG} spinning=${true} disabled=${true}>
+            save
+        <//>
+    `, container)
+    const el = container.querySelector(
+        SubstrateButton.TAG
+    ) as SubstrateButton
+
+    render(html`
+        <${SubstrateButton.TAG} spinning=${false} disabled=${true}>
+            save
+        <//>
+    `, container)
+    t.ok(el.button?.hasAttribute('disabled'),
+        'inner button is still disabled')
+    t.equal(el.disabled, true, 'disabled property is still true')
+
+    el.spinning = true
+    el.spinning = false
+    t.ok(el.button?.hasAttribute('disabled'),
+        'the spinning setter also keeps it disabled')
+
+    render(html`
+        <${SubstrateButton.TAG} spinning=${false} disabled=${false}>
+            save
+        <//>
+    `, container)
+    t.equal(el.button?.hasAttribute('disabled'), false,
+        'enabling the host still enables the inner button')
+
+    container.remove()
+})
+
+test('spinning = false on an idle disabled button keeps it disabled',
+    async t => {
+        const container = document.createElement('div')
+        document.body.appendChild(container)
+        render(html`
+            <${SubstrateButton.TAG} disabled=${true}>save<//>
+        `, container)
+        const el = container.querySelector(
+            SubstrateButton.TAG
+        ) as SubstrateButton
+
+        el.spinning = false
+        t.ok(el.button?.hasAttribute('disabled'),
+            'inner button is still disabled')
+
+        container.remove()
+    })
+
+test('enabling the host while spinning keeps it disabled', async t => {
+    const container = document.createElement('div')
+    document.body.appendChild(container)
+    render(html`
+        <${SubstrateButton.TAG} spinning=${true} disabled=${true}>
+            save
+        <//>
+    `, container)
+    const el = container.querySelector(
+        SubstrateButton.TAG
+    ) as SubstrateButton
+
+    render(html`
+        <${SubstrateButton.TAG} spinning=${true} disabled=${false}>
+            save
+        <//>
+    `, container)
+    t.ok(el.button?.hasAttribute('disabled'),
+        'inner button is disabled while spinning')
+
+    render(html`
+        <${SubstrateButton.TAG} spinning=${false} disabled=${false}>
+            save
+        <//>
+    `, container)
+    t.equal(el.button?.hasAttribute('disabled'), false,
+        'inner button is enabled once spinning ends')
+
+    container.remove()
+})
+
 test('all done', () => {
     // @ts-expect-error tests
     window.testsFinished = true
