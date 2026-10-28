@@ -48,19 +48,15 @@ npm i -S @substrate-system/button
 
 ## Dependencies
 
-Depends on these CSS variables, which are exposed in the
-[@substrate-system/css](https://github.com/substrate-system/css) package.
+The CSS reads these variables. They are shared with the other
+`@substrate-system` form controls, so an app can set them once. Each
+one has a fallback, so they are all optional.
 
 ```css
 :root {
-  --substrate-medium: #999da0;
-  --substrate-button-text: #36393d;
-  --substrate-primary: #36393d;
-  --substrate-font: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-  --substrate-button-background: #f5f5f5;
-  --substrate-button-shadow: #00000054;
-  --substrate-button-background-focus: #ededed;
-  --substrate-button-background-hover: #e6e6e6;
+  --substrate-text: black;  /* label and spinner color */
+  --substrate-border: currentColor;  /* button border */
+  --substrate-focus: currentColor;  /* focus and hover outline */
 }
 ```
 
@@ -171,6 +167,37 @@ const htmlString = html({
   autofocus: false
 })
 ```
+
+#### Rendering the inner button yourself
+
+Both versions hydrate. If the host already contains a `<button>` when
+it connects, the element keeps that node and only adds behavior
+(`disabled`, `spinning`, and attribute forwarding). This is the way to
+use it with a framework like Preact, because the framework then owns
+every node and nothing is replaced under it.
+
+Render the markup like this:
+
+```js
+html`<substrate-button spinning=${saving}>
+  <button class="substrate-button btn" type="submit">
+    <span class="btn-content">Save</span>
+  </button>
+</substrate-button>`
+```
+
+The CSS styles any `<button>` inside the host. The label must be
+inside a `.btn-content` element, because the spinning state hides
+`.btn-content` to make room for the spinner. The `substrate-button` and
+`btn` classes match what the element renders itself, and are
+recommended for consistency.
+
+If you let the full version render the button, it moves the host's
+child nodes into a new `<button>`. Node identity is kept, so a
+framework can still update the label text in place. But if the
+framework later inserts a new sibling node, the node goes into the
+host, outside the button. Render the inner button yourself if the
+children will change shape.
 
 ### pre-built
 

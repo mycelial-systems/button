@@ -244,19 +244,9 @@ export class SubstrateButton extends WebComponent.create('substrate-button') {
     }
 
     connectedCallback () {
-        // connect event listeners
+        // The inner element is a native <button>, so the browser
+        // already handles Enter and Space. No keyboard handlers needed.
         this.render()
-        this._setupKeyboardHandlers()
-    }
-
-    _setupKeyboardHandlers () {
-        // Space and Enter should trigger click
-        this.button?.addEventListener('keydown', (e:KeyboardEvent) => {
-            if (e.key === ' ' || e.key === 'Enter') {
-                e.preventDefault()
-                this.button?.click()
-            }
-        })
     }
 
     render () {

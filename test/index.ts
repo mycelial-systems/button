@@ -383,6 +383,66 @@ test('enabling the host while spinning keeps it disabled', async t => {
     container.remove()
 })
 
+test('keydown does not synthesize a click', async t => {
+    // A native <button> already activates on Enter and Space. A keydown
+    // handler that calls click() repeats clicks while Space is held.
+    const container = document.createElement('div')
+    document.body.appendChild(container)
+    render(html`<${SubstrateButton.TAG}>save<//>`, container)
+    const el = container.querySelector(
+        SubstrateButton.TAG
+    ) as SubstrateButton
+
+    let clicks = 0
+    el.button?.addEventListener('click', () => clicks++)
+
+    for (const key of [' ', 'Enter']) {
+        const ev = new KeyboardEvent('keydown', {
+            key,
+            bubbles: true,
+            cancelable: true,
+        })
+        el.button?.dispatchEvent(ev)
+        t.equal(ev.defaultPrevented, false,
+            `keydown "${key}" is not prevented`)
+    }
+    t.equal(clicks, 0, 'no click is fired from keydown')
+
+    container.remove()
+})
+
+test('hydrates an inner button rendered by the app', async t => {
+    const container = document.createElement('div')
+    document.body.appendChild(container)
+    render(html`
+        <${SubstrateButton.TAG}>
+            <button class="substrate-button btn">
+                <span class="btn-content">save</span>
+            </button>
+        <//>
+    `, container)
+    const el = container.querySelector(
+        SubstrateButton.TAG
+    ) as SubstrateButton
+    const btn = container.querySelector('button')!
+
+    t.equal(el.button, btn, 'keeps the same <button> node')
+    t.equal(el.querySelectorAll('button').length, 1,
+        'does not render a second button')
+
+    render(html`
+        <${SubstrateButton.TAG} spinning=${true}>
+            <button class="substrate-button btn">
+                <span class="btn-content">save</span>
+            </button>
+        <//>
+    `, container)
+    t.ok(btn.hasAttribute('disabled'),
+        'spinning still disables the app-rendered button')
+
+    container.remove()
+})
+
 test('all done', () => {
     // @ts-expect-error tests
     window.testsFinished = true

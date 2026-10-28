@@ -17,7 +17,6 @@ export class SubstrateButton extends SubstrateButtonLight {
 
     connectedCallback ():void {
         this.render()
-        this._setupKeyboardHandlers()
     }
 
     render () {
