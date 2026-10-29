@@ -572,6 +572,29 @@ test('hydrates an inner button rendered by the app', async t => {
     container.remove()
 })
 
+test('hydrates aria-live onto an inner button rendered by the app', t => {
+    const container = document.createElement('div')
+    document.body.appendChild(container)
+    render(html`
+        <${SubstrateButton.TAG}>
+            <button class="substrate-button btn">
+                <span class="btn-content">save</span>
+            </button>
+        <//>
+    `, container)
+    const el = container.querySelector(
+        SubstrateButton.TAG
+    ) as SubstrateButton
+    const btn = container.querySelector('button')!
+
+    el.setAttribute('aria-live', 'polite')
+
+    t.equal(btn.getAttribute('aria-live'), 'polite',
+        'inner button gets aria-live from the hydrated host')
+
+    container.remove()
+})
+
 test('all done', () => {
     // @ts-expect-error tests
     window.testsFinished = true
