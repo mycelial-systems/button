@@ -54,7 +54,6 @@ export function html (attrs:Partial<Attrs>, textContent:string) {
         name ? `name="${escapeAttr(name)}"` : '',
         tabindex ? `tabindex="${tabindex}"` : 'tabindex="0"',
         ariaLabel ? `aria-label="${escapeAttr(ariaLabel)}"` : '',
-        'aria-live="polite"',
         extraStr,
     ]).filter(Boolean).join(' ')
 

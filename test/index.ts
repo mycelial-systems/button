@@ -187,6 +187,20 @@ test('preact: render button without disabled attribute', t => {
     )
 })
 
+test('default-rendered button has no aria-live attribute', async t => {
+    document.body.innerHTML += `
+        <substrate-button id="default-aria-live-test">
+            save
+        </substrate-button>
+    `
+    const el = await waitFor(
+        '#default-aria-live-test'
+    ) as SubstrateButton
+
+    t.equal(el.button?.getAttribute('aria-live'), null,
+        'inner button has no aria-live attribute by default')
+})
+
 test('inner button class attribute has no duplicate tokens', async t => {
     document.body.innerHTML += `
         <substrate-button id="dup-class-test">
