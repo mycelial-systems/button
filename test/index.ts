@@ -340,6 +340,22 @@ test('aria-live attribute is forwarded from a declared host', async t => {
         'inner button has aria-live from the host')
 })
 
+test('aria-live changes on the host update the inner button', async t => {
+    document.body.innerHTML += `
+        <substrate-button id="aria-live-change-test">
+            save
+        </substrate-button>
+    `
+    const el = await waitFor(
+        '#aria-live-change-test'
+    ) as SubstrateButton
+
+    el.setAttribute('aria-live', 'polite')
+
+    t.equal(el.button?.getAttribute('aria-live'), 'polite',
+        'inner button gets the updated aria-live value')
+})
+
 test('preact: label content updates reactively', t => {
     const container = document.createElement('div')
     document.body.appendChild(container)
