@@ -51,7 +51,7 @@ substrate-button button, substrate-button a.btn {
             inset: 0;
             margin: auto;
             border-radius: 50%;
-            border-top: 2px solid currentColor;
+            border-top: 2px solid currentcolor;
             border-right: 2px solid transparent;
             animation: spinner 0.6s linear infinite;
         }
