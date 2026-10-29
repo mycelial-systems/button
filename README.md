@@ -34,6 +34,7 @@ A button web component, with a visual "loading" state.
   * [pre-built](#pre-built)
 - [Example](#example)
   * [Attributes](#attributes)
+    + [Forwarded attributes](#forwarded-attributes)
 
 <!-- tocstop -->
 
@@ -234,6 +235,16 @@ See the example in [./example](./example/).
 ```
 
 ### Attributes
+
+#### Forwarded attributes
+
+The host forwards these attributes to its inner native `<button>` and keeps
+them in sync when they change: `type`, `name`, `value`, `form`, `formaction`,
+`formenctype`, `formmethod`, `formnovalidate`, `formtarget`,
+`popovertarget`, `popovertargetaction`, `title`, and `aria-live`.
+
+Set `aria-live` on the `<substrate-button>` host only when your app needs
+label changes announced.
 
 #### spinning
 
