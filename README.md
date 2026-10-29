@@ -256,6 +256,9 @@ The inner button uses native button semantics. It has no `role` or
 needs label changes announced. While the button is spinning, its inner button
 has `aria-busy="true"`.
 
+Upgrade note: if your app relied on the previous default `aria-live` value,
+set `aria-live` on the host to restore it.
+
 ##### Announce loading in a status region
 
 The button does not announce loading on its own. Render one `role="status"`
