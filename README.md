@@ -35,6 +35,7 @@ A button web component, with a visual "loading" state.
 - [Example](#example)
   * [Attributes](#attributes)
     + [Forwarded attributes](#forwarded-attributes)
+    + [Accessibility](#accessibility)
 
 <!-- tocstop -->
 
@@ -245,6 +246,15 @@ them in sync when they change: `type`, `name`, `value`, `form`, `formaction`,
 
 Set `aria-live` on the `<substrate-button>` host only when your app needs
 label changes announced.
+
+#### Accessibility
+
+The inner button uses native button semantics. It has no `role` or
+`aria-disabled`, and native `disabled` is the source of truth.
+
+`aria-live` is opt-in: set it on the `<substrate-button>` host when your app
+needs label changes announced. While the button is spinning, its inner button
+has `aria-busy="true"`.
 
 #### spinning
 
