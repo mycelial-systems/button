@@ -24,19 +24,19 @@ Scope:
 
 **Blocked by:** None (can start immediately)
 
-**Status:** ready-for-agent
+**Status:** done
 
-- [ ] A default-rendered button has no `role` and no `aria-disabled` on
+- [x] A default-rendered button has no `role` and no `aria-disabled` on
       the inner button (checked through `el.button`).
-- [ ] Setting the host's `disabled` attribute toggles native `disabled`
+- [x] Setting the host's `disabled` attribute toggles native `disabled`
       on the inner button and never adds `aria-disabled`.
-- [ ] Setting the host's `disabled` property toggles native `disabled`
+- [x] Setting the host's `disabled` property toggles native `disabled`
       on the inner button and never adds `aria-disabled`.
-- [ ] Starting `spinning` sets `aria-busy="true"` on the inner button,
+- [x] Starting `spinning` sets `aria-busy="true"` on the inner button,
       and ending it sets `aria-busy="false"`.
-- [ ] The existing spinning/disabled tests still pass unchanged.
-- [ ] Tests check attribute presence and values only. They do not
+- [x] The existing spinning/disabled tests still pass unchanged.
+- [x] Tests check attribute presence and values only. They do not
       snapshot or string-match rendered HTML, and do not check text or
       CSS.
-- [ ] The commit message says `role` and `aria-disabled` are no longer
+- [x] The commit message says `role` and `aria-disabled` are no longer
       rendered, so that the generated changelog records it.

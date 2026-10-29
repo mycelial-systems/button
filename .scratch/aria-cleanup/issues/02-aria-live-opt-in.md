@@ -27,22 +27,22 @@ Scope:
 edit the renderer's attribute handling and the test suite, so running
 them one after the other avoids a small merge conflict.
 
-**Status:** ready-for-agent
+**Status:** done
 
-- [ ] A default-rendered button has no `aria-live` on the inner button.
-- [ ] A host declared with `aria-live` has the same value on the inner
+- [x] A default-rendered button has no `aria-live` on the inner button.
+- [x] A host declared with `aria-live` has the same value on the inner
       button.
-- [ ] A later `setAttribute('aria-live', ...)` on the host updates the
+- [x] A later `setAttribute('aria-live', ...)` on the host updates the
       inner button.
-- [ ] Removing `aria-live` from the host removes it from the inner
+- [x] Removing `aria-live` from the host removes it from the inner
       button.
-- [ ] Hydration case: when the app renders the inner button, setting
+- [x] Hydration case: when the app renders the inner button, setting
       `aria-live` on the host forwards it to the app's button.
-- [ ] Tests follow the existing forwarded-attribute tests ("value
+- [x] Tests follow the existing forwarded-attribute tests ("value
       attribute is forwarded", "title attribute is forwarded",
       "hydrates an inner button rendered by the app"). They check
       attributes only, with no HTML snapshots or string matching.
-- [ ] The README's forwarded-attribute list(s) include `aria-live`.
-- [ ] The commit message says `aria-live` is no longer rendered by
+- [x] The README's forwarded-attribute list(s) include `aria-live`.
+- [x] The commit message says `aria-live` is no longer rendered by
       default and that consumers restore it by setting `aria-live` on
       the host.
