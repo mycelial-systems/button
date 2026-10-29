@@ -222,7 +222,6 @@ export class SubstrateButton extends WebComponent.create('substrate-button') {
             'disabled',
             isDisabled || this.hasAttribute('spinning')
         )
-        this.button?.setAttribute('aria-disabled', String(isDisabled))
     }
 
     handleChange_spinning (_, newValue:boolean) {

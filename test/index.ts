@@ -98,6 +98,25 @@ test('setAttribute disabled still works (no loop)', async t => {
         'inner button loses disabled attribute')
 })
 
+test('disabled host attribute uses only native disabled state', async t => {
+    document.body.innerHTML += `
+        <substrate-button id="disabled-attribute">save</substrate-button>
+    `
+    const el = await waitFor('#disabled-attribute') as SubstrateButton
+
+    el.setAttribute('disabled', '')
+    t.equal(el.button?.hasAttribute('disabled'), true,
+        'inner button becomes disabled')
+    t.equal(el.button?.hasAttribute('aria-disabled'), false,
+        'inner button has no aria-disabled while disabled')
+
+    el.removeAttribute('disabled')
+    t.equal(el.button?.hasAttribute('disabled'), false,
+        'inner button becomes enabled')
+    t.equal(el.button?.hasAttribute('aria-disabled'), false,
+        'inner button has no aria-disabled after enabling')
+})
+
 test('preact: render button with disabled attribute', t => {
     const container = document.createElement('div')
     document.body.appendChild(container)
