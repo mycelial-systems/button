@@ -280,6 +280,10 @@ export class SubstrateButton extends WebComponent.create('substrate-button') {
         // The inner element is a native <button>, so the browser
         // already handles Enter and Space. No keyboard handlers needed.
         this.render()
+        // Preact sets the host class before the app's button is
+        // connected, so `handleChange_class` could not copy it then.
+        // Copy it now. Adding a token twice is a no-op.
+        this.handleChange_class(null, this.getAttribute('class'))
     }
 
     render () {

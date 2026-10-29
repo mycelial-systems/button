@@ -15,10 +15,6 @@ export class SubstrateButton extends SubstrateButtonLight {
         define(SubstrateButton.TAG, SubstrateButton)
     }
 
-    connectedCallback ():void {
-        this.render()
-    }
-
     render () {
         if (this.querySelector('button')) return
         // Read directly from host attributes: the inner button does not

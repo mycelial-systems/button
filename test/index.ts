@@ -663,6 +663,22 @@ test('hydrates a host class change onto an app-rendered button', t => {
     container.remove()
 })
 
+test('hydrates the first host class onto an app-rendered button', t => {
+    const container = document.createElement('div')
+    document.body.appendChild(container)
+    render(html`
+        <${SubstrateButton.TAG} class="a">
+            <button class="substrate-button btn mine">
+                <span class="btn-content">save</span>
+            </button>
+        <//>
+    `, container)
+    const btn = container.querySelector('button')!
+    t.ok(btn.classList.contains('a'), 'has the host class')
+    t.ok(btn.classList.contains('mine'), 'keeps the app-rendered class')
+    container.remove()
+})
+
 test('all done', () => {
     // @ts-expect-error tests
     window.testsFinished = true
