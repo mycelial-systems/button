@@ -25,6 +25,7 @@ export const FORWARDED_ATTRS = [
     'popovertarget',
     'popovertargetaction',
     'title',
+    'aria-live',
 ] as const
 
 /**

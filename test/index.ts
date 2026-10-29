@@ -326,6 +326,20 @@ test('title attribute is forwarded', async t => {
         'inner button has title from host')
 })
 
+test('aria-live attribute is forwarded from a declared host', async t => {
+    document.body.innerHTML += `
+        <substrate-button id="aria-live-declared-test" aria-live="assertive">
+            save
+        </substrate-button>
+    `
+    const el = await waitFor(
+        '#aria-live-declared-test'
+    ) as SubstrateButton
+
+    t.equal(el.button?.getAttribute('aria-live'), 'assertive',
+        'inner button has aria-live from the host')
+})
+
 test('preact: label content updates reactively', t => {
     const container = document.createElement('div')
     document.body.appendChild(container)

@@ -15,7 +15,7 @@ export type Attrs = {
 
 const HANDLED_KEYS = new Set([
     'class', 'type', 'name', 'tabindex', 'role',
-    'aria-label', 'aria-live', 'disabled', 'autofocus'
+    'aria-label', 'disabled', 'autofocus'
 ])
 
 function escapeAttr (v:string):string {
