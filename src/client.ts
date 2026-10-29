@@ -80,7 +80,6 @@ export class SubstrateButton extends WebComponent.create('substrate-button') {
             'disabled',
             disabledValue || this.hasAttribute('spinning')
         )
-        this.button?.setAttribute('aria-disabled', String(disabledValue))
     }
 
     get type ():string|null {

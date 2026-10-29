@@ -58,6 +58,25 @@ test('disabled property reflects to host attribute', async t => {
         'setting .disabled=false removes host attribute')
 })
 
+test('disabled property uses only native disabled state', async t => {
+    document.body.innerHTML += `
+        <substrate-button id="disabled-property">save</substrate-button>
+    `
+    const el = await waitFor('#disabled-property') as SubstrateButton
+
+    el.disabled = true
+    t.equal(el.button?.hasAttribute('disabled'), true,
+        'inner button becomes disabled')
+    t.equal(el.button?.hasAttribute('aria-disabled'), false,
+        'inner button has no aria-disabled while disabled')
+
+    el.disabled = false
+    t.equal(el.button?.hasAttribute('disabled'), false,
+        'inner button becomes enabled')
+    t.equal(el.button?.hasAttribute('aria-disabled'), false,
+        'inner button has no aria-disabled after enabling')
+})
+
 test('autofocus property reflects to host attribute', async t => {
     document.body.innerHTML += `
         <substrate-button id="autofocus-test">
