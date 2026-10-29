@@ -595,6 +595,74 @@ test('hydrates aria-live onto an inner button rendered by the app', t => {
     container.remove()
 })
 
+test('forwards a class added to the host to the inner button', async t => {
+    document.body.innerHTML += `
+        <substrate-button id="class-add">go</substrate-button>
+    `
+    const el = await waitFor('#class-add') as SubstrateButton
+    el.classList.add('btn-primary')
+    t.ok(el.button?.classList.contains('btn-primary'),
+        'inner button has the added class')
+})
+
+test('moves a changed host class onto the inner button', async t => {
+    document.body.innerHTML += `
+        <substrate-button id="class-remove"
+            class="btn-primary">go</substrate-button>
+    `
+    const el = await waitFor('#class-remove') as SubstrateButton
+    el.setAttribute('class', 'btn-secondary')
+    t.ok(!el.button?.classList.contains('btn-primary'),
+        'inner button drops the removed class')
+    t.ok(el.button?.classList.contains('btn-secondary'),
+        'inner button gains the added class')
+})
+
+test('keeps the element classes when the host class changes', async t => {
+    document.body.innerHTML += `
+        <substrate-button id="class-owned" spinning>go</substrate-button>
+    `
+    const el = await waitFor('#class-owned') as SubstrateButton
+    el.setAttribute('class', 'other')
+    const btn = el.button!
+    t.ok(btn.classList.contains('substrate-button'),
+        'keeps substrate-button')
+    t.ok(btn.classList.contains('btn'), 'keeps btn')
+    t.ok(btn.classList.contains('spinning'), 'keeps spinning')
+})
+
+test('updates the inner button when a Preact class prop changes', t => {
+    const container = document.createElement('div')
+    document.body.appendChild(container)
+    const view = (cls:string) => html`
+        <${SubstrateButton.TAG} class=${cls}>go<//>
+    `
+    render(view('a'), container)
+    render(view('b'), container)
+    const btn = container.querySelector('button')!
+    t.ok(btn.classList.contains('b'), 'inner button has the new class')
+    t.ok(!btn.classList.contains('a'), 'inner button drops the old class')
+    container.remove()
+})
+
+test('hydrates a host class change onto an app-rendered button', t => {
+    const container = document.createElement('div')
+    document.body.appendChild(container)
+    const view = (cls:string) => html`
+        <${SubstrateButton.TAG} class=${cls}>
+            <button class="substrate-button btn mine">
+                <span class="btn-content">save</span>
+            </button>
+        <//>
+    `
+    render(view('a'), container)
+    render(view('b'), container)
+    const btn = container.querySelector('button')!
+    t.ok(btn.classList.contains('mine'), 'keeps the app-rendered class')
+    t.ok(btn.classList.contains('b'), 'has the new host class')
+    container.remove()
+})
+
 test('all done', () => {
     // @ts-expect-error tests
     window.testsFinished = true

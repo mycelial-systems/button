@@ -29,6 +29,24 @@ export const FORWARDED_ATTRS = [
 ] as const
 
 /**
+ * Classes the element manages on the inner <button> itself. A change to
+ * the host's `class` never adds or removes these.
+ */
+export const OWNED_CLASSES = [
+    'substrate-button',
+    'btn',
+    'spinning',
+] as const
+
+function classTokens (value:string|null):string[] {
+    return (value ?? '').split(/\s+/).filter(Boolean)
+}
+
+function isOwnedClass (token:string):boolean {
+    return (OWNED_CLASSES as readonly string[]).includes(token)
+}
+
+/**
  * This is the lightweight version for browsers.
  * It "hydrates" only, meaining sets up event listeners.
  * It does not know how to render itself.
@@ -40,6 +58,7 @@ export class SubstrateButton extends WebComponent.create('substrate-button') {
         'autofocus',
         'disabled',
         'spinning',
+        'class',
         ...FORWARDED_ATTRS,
     ]
 
@@ -239,6 +258,21 @@ export class SubstrateButton extends WebComponent.create('substrate-button') {
                 this.hasAttribute('disabled')
             )
             this.button?.setAttribute('aria-busy', 'false')
+        }
+    }
+
+    handleChange_class (oldValue:string|null, newValue:string|null) {
+        const btn = this.button
+        if (!btn) return
+        const before = classTokens(oldValue)
+        const after = classTokens(newValue)
+        for (const token of before) {
+            if (after.includes(token) || isOwnedClass(token)) continue
+            btn.classList.remove(token)
+        }
+        for (const token of after) {
+            if (before.includes(token) || isOwnedClass(token)) continue
+            btn.classList.add(token)
         }
     }
 
