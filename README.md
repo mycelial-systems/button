@@ -256,6 +256,36 @@ The inner button uses native button semantics. It has no `role` or
 needs label changes announced. While the button is spinning, its inner button
 has `aria-busy="true"`.
 
+##### Announce loading in a status region
+
+The button does not announce loading on its own. Render one `role="status"`
+element in the app, keep it in the DOM, and update its text as the operation
+starts and ends. It may use the app's visually hidden class.
+
+```html
+<substrate-button id="save-button">Save</substrate-button>
+<p id="save-status" role="status" class="visually-hidden"></p>
+```
+
+```js
+const button = document.querySelector('#save-button')
+const status = document.querySelector('#save-status')
+
+async function saveWithAnnouncement () {
+  button.spinning = true
+  status.textContent = 'Saving'
+
+  await save()
+
+  button.spinning = false
+  status.textContent = 'Saved'
+}
+```
+
+Putting the message in a separate region makes the announcement reliable:
+the status element exists before its text changes, and the announcement does
+not depend on which element has focus.
+
 #### spinning
 
 Add an attribute `spinning` to set the loading state.
