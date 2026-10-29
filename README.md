@@ -35,6 +35,7 @@ A button web component, with a visual "loading" state.
 - [Example](#example)
   * [Attributes](#attributes)
     + [Forwarded attributes](#forwarded-attributes)
+    + [Accessibility](#accessibility)
 
 <!-- tocstop -->
 
@@ -245,6 +246,48 @@ them in sync when they change: `type`, `name`, `value`, `form`, `formaction`,
 
 Set `aria-live` on the `<substrate-button>` host only when your app needs
 label changes announced.
+
+#### Accessibility
+
+The inner button uses native button semantics. It has no `role` or
+`aria-disabled`, and native `disabled` is the source of truth.
+
+`aria-live` is opt-in: set it on the `<substrate-button>` host when your app
+needs label changes announced. While the button is spinning, its inner button
+has `aria-busy="true"`.
+
+Upgrade note: if your app relied on the previous default `aria-live` value,
+set `aria-live` on the host to restore it.
+
+##### Announce loading in a status region
+
+The button does not announce loading on its own. Render one `role="status"`
+element in the app, keep it in the DOM, and update its text as the operation
+starts and ends. It may use the app's visually hidden class.
+
+```html
+<substrate-button id="save-button">Save</substrate-button>
+<p id="save-status" role="status" class="visually-hidden"></p>
+```
+
+```js
+const button = document.querySelector('#save-button')
+const status = document.querySelector('#save-status')
+
+async function saveWithAnnouncement () {
+  button.spinning = true
+  status.textContent = 'Saving'
+
+  await save()
+
+  button.spinning = false
+  status.textContent = 'Saved'
+}
+```
+
+Putting the message in a separate region makes the announcement reliable:
+the status element exists before its text changes, and the announcement does
+not depend on which element has focus.
 
 #### spinning
 
