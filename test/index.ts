@@ -24,6 +24,18 @@ test('create a button', async t => {
     t.ok(el.button instanceof HTMLButtonElement, 'should contain a button')
 })
 
+test('inner button uses native role and disabled semantics', async t => {
+    document.body.innerHTML += `
+        <substrate-button id="native-semantics">save</substrate-button>
+    `
+    const el = await waitFor('#native-semantics') as SubstrateButton
+
+    t.equal(el.button?.hasAttribute('role'), false,
+        'inner button has no explicit role')
+    t.equal(el.button?.hasAttribute('aria-disabled'), false,
+        'inner button has no aria-disabled attribute')
+})
+
 test('disabled property reflects to host attribute', async t => {
     document.body.innerHTML += `
         <substrate-button id="reflect-test">
@@ -44,6 +56,25 @@ test('disabled property reflects to host attribute', async t => {
     el.disabled = false
     t.equal(el.hasAttribute('disabled'), false,
         'setting .disabled=false removes host attribute')
+})
+
+test('disabled property uses only native disabled state', async t => {
+    document.body.innerHTML += `
+        <substrate-button id="disabled-property">save</substrate-button>
+    `
+    const el = await waitFor('#disabled-property') as SubstrateButton
+
+    el.disabled = true
+    t.equal(el.button?.hasAttribute('disabled'), true,
+        'inner button becomes disabled')
+    t.equal(el.button?.hasAttribute('aria-disabled'), false,
+        'inner button has no aria-disabled while disabled')
+
+    el.disabled = false
+    t.equal(el.button?.hasAttribute('disabled'), false,
+        'inner button becomes enabled')
+    t.equal(el.button?.hasAttribute('aria-disabled'), false,
+        'inner button has no aria-disabled after enabling')
 })
 
 test('autofocus property reflects to host attribute', async t => {
@@ -84,6 +115,25 @@ test('setAttribute disabled still works (no loop)', async t => {
         'removeAttribute disabled clears .disabled property')
     t.ok(!el.button?.hasAttribute('disabled'),
         'inner button loses disabled attribute')
+})
+
+test('disabled host attribute uses only native disabled state', async t => {
+    document.body.innerHTML += `
+        <substrate-button id="disabled-attribute">save</substrate-button>
+    `
+    const el = await waitFor('#disabled-attribute') as SubstrateButton
+
+    el.setAttribute('disabled', '')
+    t.equal(el.button?.hasAttribute('disabled'), true,
+        'inner button becomes disabled')
+    t.equal(el.button?.hasAttribute('aria-disabled'), false,
+        'inner button has no aria-disabled while disabled')
+
+    el.removeAttribute('disabled')
+    t.equal(el.button?.hasAttribute('disabled'), false,
+        'inner button becomes enabled')
+    t.equal(el.button?.hasAttribute('aria-disabled'), false,
+        'inner button has no aria-disabled after enabling')
 })
 
 test('preact: render button with disabled attribute', t => {
@@ -381,6 +431,21 @@ test('enabling the host while spinning keeps it disabled', async t => {
         'inner button is enabled once spinning ends')
 
     container.remove()
+})
+
+test('spinning preserves aria-busy updates', async t => {
+    document.body.innerHTML += `
+        <substrate-button id="busy-state">save</substrate-button>
+    `
+    const el = await waitFor('#busy-state') as SubstrateButton
+
+    el.spinning = true
+    t.equal(el.button?.getAttribute('aria-busy'), 'true',
+        'inner button is busy while spinning')
+
+    el.spinning = false
+    t.equal(el.button?.getAttribute('aria-busy'), 'false',
+        'inner button is not busy after spinning')
 })
 
 test('keydown does not synthesize a click', async t => {

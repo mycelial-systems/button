@@ -53,7 +53,6 @@ export function html (attrs:Partial<Attrs>, textContent:string) {
         type ? `type="${escapeAttr(type)}"` : '',
         name ? `name="${escapeAttr(name)}"` : '',
         tabindex ? `tabindex="${tabindex}"` : 'tabindex="0"',
-        'role="button"',
         ariaLabel ? `aria-label="${escapeAttr(ariaLabel)}"` : '',
         'aria-live="polite"',
         extraStr,
