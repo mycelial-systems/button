@@ -433,6 +433,21 @@ test('enabling the host while spinning keeps it disabled', async t => {
     container.remove()
 })
 
+test('spinning preserves aria-busy updates', async t => {
+    document.body.innerHTML += `
+        <substrate-button id="busy-state">save</substrate-button>
+    `
+    const el = await waitFor('#busy-state') as SubstrateButton
+
+    el.spinning = true
+    t.equal(el.button?.getAttribute('aria-busy'), 'true',
+        'inner button is busy while spinning')
+
+    el.spinning = false
+    t.equal(el.button?.getAttribute('aria-busy'), 'false',
+        'inner button is not busy after spinning')
+})
+
 test('keydown does not synthesize a click', async t => {
     // A native <button> already activates on Enter and Space. A keydown
     // handler that calls click() repeats clicks while Space is held.
