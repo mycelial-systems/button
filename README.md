@@ -247,6 +247,12 @@ them in sync when they change: `type`, `name`, `value`, `form`, `formaction`,
 Set `aria-live` on the `<substrate-button>` host only when your app needs
 label changes announced.
 
+The host's `class` also follows onto the inner button, including a button
+rendered by your app before the element hydrates. Classes you add to the host
+are added to the inner button, and classes you remove are removed from it.
+The classes the element owns, `substrate-button`, `btn`, and `spinning`, are
+never added or removed by a host class change.
+
 #### Accessibility
 
 The inner button uses native button semantics. It has no `role` or
