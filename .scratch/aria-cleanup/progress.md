@@ -10,4 +10,7 @@ Started: 2026-10-29T19:16:48.273Z
   branch: button--aria-cleanup-02-aria-live-opt-in
   exit: 0
   completed: 2026-10-29T19:32:31.238Z
-- [ ] 03-readme-accessibility.md
+- [x] 03-readme-accessibility.md
+  branch: button--aria-cleanup-03-readme-accessibility
+  exit: 0
+  completed: 2026-10-29T19:35:30.585Z
