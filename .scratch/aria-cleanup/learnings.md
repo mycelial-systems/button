@@ -381,3 +381,51 @@ app-rendered button in the hydration case.
   Final documentation commit: `f79ac2f`.
 
 ---
+<!-- nightralph:entry ticket=aria-cleanup:3 attempt=1 outcome=done -->
+## 2026-10-29 12:35 -- aria-cleanup/03 attempt 1 -- done
+
+Effort: medium. Agent exit: 0. Checked items: none.
+
+### Agent notes
+# 03 README accessibility notes
+
+## Initial assessment
+
+This ticket changes documentation only. The requested behavior is already
+implemented by tickets 01 and 02 and confirmed in `src/client.ts`,
+`src/html.ts`, and the public custom-element tests. Per the ticket, no test is
+added for the documentation.
+
+## Native semantics, opt-in live regions, and busy state
+
+Added the README accessibility section. It documents that the inner button has
+native semantics, that `aria-live` is opt-in on the host, and that spinning
+sets `aria-busy="true"`. This is documentation-only, so the ticket directs us
+not to add a test.
+
+## Loading announcements
+
+Documented an app-owned `role="status"` element that remains in the DOM and is
+updated with `Saving` and `Saved`. The README explains that using this separate
+region makes announcements reliable and independent of focus. No test was
+added because this is documentation-only and the ticket explicitly says not to
+add docs tests.
+
+## Upgrade guidance and formatting
+
+Added an upgrade note for consumers that relied on the prior default
+`aria-live`: set the attribute on the host to restore that behavior. Confirmed
+the README contains no em dashes or arrow characters, so the required `--` and
+`->` documentation convention remains satisfied. No test was added because
+this work is documentation-only.
+
+## Verification
+
+`npm run lint` passed. The first `npm test` stopped before running browser
+tests because the local `lightningcss` launcher was still its Windows
+placeholder. The installed macOS binary was present, so running the package's
+own `postinstall.js` restored the local launcher without changing tracked
+files. A rerun of `npm test` passed: build completed and all 72 browser tests
+passed.
+
+---
