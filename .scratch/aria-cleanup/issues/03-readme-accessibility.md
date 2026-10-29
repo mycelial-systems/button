@@ -29,15 +29,15 @@ Scope:
 **Blocked by:** 01 (Inner button relies on native role and disabled
 state), 02 (`aria-live` is opt-in through the host)
 
-**Status:** ready-for-agent
+**Status:** done
 
-- [ ] The README has an accessibility section that matches the behavior
+- [x] The README has an accessibility section that matches the behavior
       shipped in 01 and 02.
-- [ ] The README documents the `role="status"` loading-announcement
+- [x] The README documents the `role="status"` loading-announcement
       pattern with a short example, and explains why a separate region
       is used.
-- [ ] The README includes the upgrade note about restoring `aria-live`
+- [x] The README includes the upgrade note about restoring `aria-live`
       by setting it on the host.
-- [ ] The docs use `--` instead of em dashes and `->` instead of arrow
+- [x] The docs use `--` instead of em dashes and `->` instead of arrow
       characters.
-- [ ] No tests are added for the docs.
+- [x] No tests are added for the docs.
