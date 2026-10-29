@@ -12,6 +12,16 @@ Default label vocabulary. See `docs/agents/triage-labels.md`.
 ### Domain docs
 
 Single-context layout. See `docs/agents/domain.md`.
+
+### Button attribute forwarding
+
+`FORWARDED_ATTRS` in `src/client.ts` drives both dynamic host-attribute
+mirroring and attributes supplied to the full renderer. A new forwarded
+attribute must also pass through `HANDLED_KEYS` in `src/html.ts`.
+
+Test forwarding at the public custom-element seam with
+`esbuild test/index.ts --bundle | tapout`; cover both a rendered button and
+the app-rendered hydration path when applicable.
 <!-- nightralph:end -->
 
 ## Button tests
