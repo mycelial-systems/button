@@ -29,3 +29,8 @@ the app-rendered hydration path when applicable.
 The public custom-element seam is `substrate-button` and its `button`
 property. Run the browser suite with `esbuild test/index.ts --bundle | tapout`;
 inspect inner-button attributes through `el.button` rather than rendered HTML.
+
+## Release versioning
+
+For a release, verify that the manifest version advances the latest published
+version recorded in `CHANGELOG.md`. The manifest check is part of `npm test`.
