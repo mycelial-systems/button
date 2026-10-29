@@ -356,6 +356,26 @@ test('aria-live changes on the host update the inner button', async t => {
         'inner button gets the updated aria-live value')
 })
 
+test('removing aria-live from the host removes it from the inner button',
+    async t => {
+        document.body.innerHTML += `
+            <substrate-button
+              id="aria-live-removal-test"
+              aria-live="polite"
+            >
+                save
+            </substrate-button>
+        `
+        const el = await waitFor(
+            '#aria-live-removal-test'
+        ) as SubstrateButton
+
+        el.removeAttribute('aria-live')
+
+        t.equal(el.button?.getAttribute('aria-live'), null,
+            'inner button loses aria-live when the host loses it')
+    })
+
 test('preact: label content updates reactively', t => {
     const container = document.createElement('div')
     document.body.appendChild(container)
