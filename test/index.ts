@@ -24,6 +24,18 @@ test('create a button', async t => {
     t.ok(el.button instanceof HTMLButtonElement, 'should contain a button')
 })
 
+test('inner button uses native role and disabled semantics', async t => {
+    document.body.innerHTML += `
+        <substrate-button id="native-semantics">save</substrate-button>
+    `
+    const el = await waitFor('#native-semantics') as SubstrateButton
+
+    t.equal(el.button?.hasAttribute('role'), false,
+        'inner button has no explicit role')
+    t.equal(el.button?.hasAttribute('aria-disabled'), false,
+        'inner button has no aria-disabled attribute')
+})
+
 test('disabled property reflects to host attribute', async t => {
     document.body.innerHTML += `
         <substrate-button id="reflect-test">
