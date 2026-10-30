@@ -651,7 +651,10 @@ test('updates the inner button when a Preact class prop changes', t => {
     `
     render(view('a'), container)
     render(view('b'), container)
-    const btn = container.querySelector('button')!
+    const el = container.querySelector(
+        'substrate-button'
+    ) as SubstrateButton
+    const btn = el.button!
     t.ok(btn.classList.contains('b'), 'inner button has the new class')
     t.ok(!btn.classList.contains('a'), 'inner button drops the old class')
     container.remove()
@@ -669,7 +672,10 @@ test('hydrates a host class change onto an app-rendered button', t => {
     `
     render(view('a'), container)
     render(view('b'), container)
-    const btn = container.querySelector('button')!
+    const el = container.querySelector(
+        'substrate-button'
+    ) as SubstrateButton
+    const btn = el.button!
     t.ok(btn.classList.contains('mine'), 'keeps the app-rendered class')
     t.ok(btn.classList.contains('b'), 'has the new host class')
     t.ok(!btn.classList.contains('a'), 'drops the old host class')
@@ -686,7 +692,10 @@ test('hydrates the first host class onto an app-rendered button', t => {
             </button>
         <//>
     `, container)
-    const btn = container.querySelector('button')!
+    const el = container.querySelector(
+        'substrate-button'
+    ) as SubstrateButton
+    const btn = el.button!
     t.ok(btn.classList.contains('a'), 'has the host class')
     t.ok(btn.classList.contains('mine'), 'keeps the app-rendered class')
     container.remove()
