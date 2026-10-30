@@ -59,11 +59,13 @@ export class SubstrateButton extends WebComponent.create('substrate-button') {
         'disabled',
         'spinning',
         'class',
+        'aria-label',
         ...FORWARDED_ATTRS,
     ]
 
     static TAG = 'substrate-button'
     _isSpinning:boolean
+    _ariaLabel:string|null = null
 
     static define () {
         define(SubstrateButton.TAG, SubstrateButton)
@@ -154,6 +156,29 @@ export class SubstrateButton extends WebComponent.create('substrate-button') {
             this.toggleAttribute('autofocus', value)
         }
         this.button?.toggleAttribute('autofocus', value)
+    }
+
+    /**
+     * The inner button's accessible name. It lives only on the inner
+     * button: `aria-label` on a host with no role fails axe. An empty
+     * string means no label, because Preact sets a removed property
+     * prop to ''.
+     */
+    get ariaLabel ():string|null {
+        return this.button?.getAttribute('aria-label') ?? this._ariaLabel
+    }
+
+    set ariaLabel (value:string|null) {
+        const label = value || null
+        this._ariaLabel = label
+        if (label === null) {
+            this.button?.removeAttribute('aria-label')
+        } else {
+            this.button?.setAttribute('aria-label', label)
+        }
+        if (this.hasAttribute('aria-label')) {
+            this.removeAttribute('aria-label')
+        }
     }
 
     /**
@@ -280,6 +305,15 @@ export class SubstrateButton extends WebComponent.create('substrate-button') {
             if (before.includes(token) || isOwnedClass(token)) continue
             btn.classList.add(token)
         }
+    }
+
+    /**
+     * Move a host `aria-label` onto the inner button. The setter removes
+     * the host attribute, which calls this again with null; that call
+     * does nothing.
+     */
+    'handleChange_aria-label' (_old:string|null, newValue:string|null) {
+        if (newValue !== null) this.ariaLabel = newValue
     }
 
     connectedCallback () {

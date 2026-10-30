@@ -680,6 +680,79 @@ test('hydrates the first host class onto an app-rendered button', t => {
     container.remove()
 })
 
+test('moves a host aria-label onto the inner button', async t => {
+    document.body.innerHTML += `
+        <substrate-button id="label-move"
+            aria-label="Close">x</substrate-button>
+    `
+    const el = await waitFor('#label-move') as SubstrateButton
+    t.equal(el.button!.getAttribute('aria-label'), 'Close',
+        'inner button has the label')
+    t.ok(!el.hasAttribute('aria-label'), 'host has no aria-label')
+})
+
+test('moves a late host aria-label onto the inner button', async t => {
+    document.body.innerHTML += `
+        <substrate-button id="label-late">x</substrate-button>
+    `
+    const el = await waitFor('#label-late') as SubstrateButton
+    el.setAttribute('aria-label', 'Dismiss')
+    t.equal(el.button!.getAttribute('aria-label'), 'Dismiss',
+        'inner button has the label')
+    t.ok(!el.hasAttribute('aria-label'), 'host has no aria-label')
+})
+
+test('ariaLabel property names the inner button', async t => {
+    document.body.innerHTML += `
+        <substrate-button id="label-prop">x</substrate-button>
+    `
+    const el = await waitFor('#label-prop') as SubstrateButton
+    el.ariaLabel = 'Close'
+    t.ok(!el.hasAttribute('aria-label'),
+        'host has no aria-label while a label is set')
+    t.equal(el.button!.getAttribute('aria-label'), 'Close',
+        'inner button has the label')
+    t.equal(el.ariaLabel, 'Close', 'getter reads the label back')
+    el.ariaLabel = ''
+    t.ok(!el.button!.hasAttribute('aria-label'),
+        'empty string clears the inner label')
+    el.ariaLabel = 'Close'
+    el.ariaLabel = null
+    t.ok(!el.button!.hasAttribute('aria-label'),
+        'null clears the inner label')
+    t.ok(!el.hasAttribute('aria-label'), 'host has no aria-label')
+})
+
+test('ariaLabel set before connect reaches the built button', t => {
+    const el = document.createElement('substrate-button') as SubstrateButton
+    el.ariaLabel = 'Early'
+    document.body.appendChild(el)
+    t.equal(el.button!.getAttribute('aria-label'), 'Early',
+        'built inner button has the label')
+    t.ok(!el.hasAttribute('aria-label'), 'host has no aria-label')
+    el.remove()
+})
+
+test('preact: ariaLabel prop names the inner button', t => {
+    const container = document.createElement('div')
+    document.body.appendChild(container)
+    const view = (label?:string) => html`
+        <${SubstrateButton.TAG} ariaLabel=${label}>x<//>
+    `
+    render(view('Close'), container)
+    const btn = container.querySelector('button')!
+    t.equal(btn.getAttribute('aria-label'), 'Close', 'first label is set')
+
+    render(view('Dismiss'), container)
+    t.equal(btn.getAttribute('aria-label'), 'Dismiss', 'changed label applies')
+
+    render(view(undefined), container)
+    t.ok(!btn.hasAttribute('aria-label'), 'removed prop removes the label')
+    const host = container.querySelector('substrate-button')!
+    t.ok(!host.hasAttribute('aria-label'), 'host has no aria-label')
+    container.remove()
+})
+
 test('all done', () => {
     // @ts-expect-error tests
     window.testsFinished = true
