@@ -595,6 +595,222 @@ test('hydrates aria-live onto an inner button rendered by the app', t => {
     container.remove()
 })
 
+test('forwards a class added to the host to the inner button', async t => {
+    document.body.innerHTML += `
+        <substrate-button id="class-add">go</substrate-button>
+    `
+    const el = await waitFor('#class-add') as SubstrateButton
+    el.classList.add('btn-primary')
+    t.ok(el.button?.classList.contains('btn-primary'),
+        'inner button has the added class')
+})
+
+test('moves a changed host class onto the inner button', async t => {
+    document.body.innerHTML += `
+        <substrate-button id="class-remove"
+            class="btn-primary">go</substrate-button>
+    `
+    const el = await waitFor('#class-remove') as SubstrateButton
+    el.setAttribute('class', 'btn-secondary')
+    t.ok(!el.button?.classList.contains('btn-primary'),
+        'inner button drops the removed class')
+    t.ok(el.button?.classList.contains('btn-secondary'),
+        'inner button gains the added class')
+})
+
+test('keeps the element classes when the host class changes', async t => {
+    document.body.innerHTML += `
+        <substrate-button id="class-owned" spinning>go</substrate-button>
+    `
+    const el = await waitFor('#class-owned') as SubstrateButton
+    el.setAttribute('class', 'other')
+    const btn = el.button!
+    t.ok(btn.classList.contains('substrate-button'),
+        'keeps substrate-button')
+    t.ok(btn.classList.contains('btn'), 'keeps btn')
+    t.ok(btn.classList.contains('spinning'), 'keeps spinning')
+})
+
+test('a host class change never adds an element class', async t => {
+    document.body.innerHTML += `
+        <substrate-button id="class-owned-add">go</substrate-button>
+    `
+    const el = await waitFor('#class-owned-add') as SubstrateButton
+    el.setAttribute('class', 'spinning other')
+    const btn = el.button!
+    t.ok(!btn.classList.contains('spinning'),
+        'inner button does not gain spinning')
+    t.ok(btn.classList.contains('other'), 'inner button gains other')
+})
+
+test('updates the inner button when a Preact class prop changes', t => {
+    const container = document.createElement('div')
+    document.body.appendChild(container)
+    const view = (cls:string) => html`
+        <${SubstrateButton.TAG} class=${cls}>go<//>
+    `
+    render(view('a'), container)
+    render(view('b'), container)
+    const el = container.querySelector(
+        'substrate-button'
+    ) as SubstrateButton
+    const btn = el.button!
+    t.ok(btn.classList.contains('b'), 'inner button has the new class')
+    t.ok(!btn.classList.contains('a'), 'inner button drops the old class')
+    container.remove()
+})
+
+test('hydrates a host class change onto an app-rendered button', t => {
+    const container = document.createElement('div')
+    document.body.appendChild(container)
+    const view = (cls:string) => html`
+        <${SubstrateButton.TAG} class=${cls}>
+            <button class="substrate-button btn mine">
+                <span class="btn-content">save</span>
+            </button>
+        <//>
+    `
+    render(view('a'), container)
+    render(view('b'), container)
+    const el = container.querySelector(
+        'substrate-button'
+    ) as SubstrateButton
+    const btn = el.button!
+    t.ok(btn.classList.contains('mine'), 'keeps the app-rendered class')
+    t.ok(btn.classList.contains('b'), 'has the new host class')
+    t.ok(!btn.classList.contains('a'), 'drops the old host class')
+    container.remove()
+})
+
+test('hydrates the first host class onto an app-rendered button', t => {
+    const container = document.createElement('div')
+    document.body.appendChild(container)
+    render(html`
+        <${SubstrateButton.TAG} class="a">
+            <button class="substrate-button btn mine">
+                <span class="btn-content">save</span>
+            </button>
+        <//>
+    `, container)
+    const el = container.querySelector(
+        'substrate-button'
+    ) as SubstrateButton
+    const btn = el.button!
+    t.ok(btn.classList.contains('a'), 'has the host class')
+    t.ok(btn.classList.contains('mine'), 'keeps the app-rendered class')
+    container.remove()
+})
+
+test('moves a host aria-label onto the inner button', async t => {
+    document.body.innerHTML += `
+        <substrate-button id="label-move"
+            aria-label="Close">x</substrate-button>
+    `
+    const el = await waitFor('#label-move') as SubstrateButton
+    t.equal(el.button!.getAttribute('aria-label'), 'Close',
+        'inner button has the label')
+    t.ok(!el.hasAttribute('aria-label'), 'host has no aria-label')
+})
+
+test('moves a late host aria-label onto the inner button', async t => {
+    document.body.innerHTML += `
+        <substrate-button id="label-late">x</substrate-button>
+    `
+    const el = await waitFor('#label-late') as SubstrateButton
+    el.setAttribute('aria-label', 'Dismiss')
+    t.equal(el.button!.getAttribute('aria-label'), 'Dismiss',
+        'inner button has the label')
+    t.ok(!el.hasAttribute('aria-label'), 'host has no aria-label')
+})
+
+test('ariaLabel property names the inner button', async t => {
+    document.body.innerHTML += `
+        <substrate-button id="label-prop">x</substrate-button>
+    `
+    const el = await waitFor('#label-prop') as SubstrateButton
+    el.ariaLabel = 'Close'
+    t.ok(!el.hasAttribute('aria-label'),
+        'host has no aria-label while a label is set')
+    t.equal(el.button!.getAttribute('aria-label'), 'Close',
+        'inner button has the label')
+    t.equal(el.ariaLabel, 'Close', 'getter reads the label back')
+    el.ariaLabel = ''
+    t.ok(!el.button!.hasAttribute('aria-label'),
+        'empty string clears the inner label')
+    el.ariaLabel = 'Close'
+    el.ariaLabel = null
+    t.ok(!el.button!.hasAttribute('aria-label'),
+        'null clears the inner label')
+    t.ok(!el.hasAttribute('aria-label'), 'host has no aria-label')
+})
+
+test('ariaLabel set before connect reaches the built button', t => {
+    const el = document.createElement('substrate-button') as SubstrateButton
+    el.ariaLabel = 'Early'
+    document.body.appendChild(el)
+    t.equal(el.button!.getAttribute('aria-label'), 'Early',
+        'built inner button has the label')
+    t.ok(!el.hasAttribute('aria-label'), 'host has no aria-label')
+    el.remove()
+})
+
+test('preact: ariaLabel prop names the inner button', t => {
+    const container = document.createElement('div')
+    document.body.appendChild(container)
+    const view = (label?:string) => html`
+        <${SubstrateButton.TAG} ariaLabel=${label}>x<//>
+    `
+    render(view('Close'), container)
+    const btn = container.querySelector('button')!
+    t.equal(btn.getAttribute('aria-label'), 'Close', 'first label is set')
+
+    render(view('Dismiss'), container)
+    t.equal(btn.getAttribute('aria-label'), 'Dismiss', 'changed label applies')
+
+    render(view(undefined), container)
+    t.ok(!btn.hasAttribute('aria-label'), 'removed prop removes the label')
+    const host = container.querySelector('substrate-button')!
+    t.ok(!host.hasAttribute('aria-label'), 'host has no aria-label')
+    container.remove()
+})
+
+test('preact: ariaLabel applies to an app-rendered button', t => {
+    const container = document.createElement('div')
+    document.body.appendChild(container)
+    render(html`
+        <${SubstrateButton.TAG} ariaLabel="Close">
+            <button>x</button>
+        <//>
+    `, container)
+    const btn = container.querySelector('button')!
+    t.equal(btn.getAttribute('aria-label'), 'Close',
+        'app-rendered inner button has the label')
+    const host = container.querySelector('substrate-button')!
+    t.ok(!host.hasAttribute('aria-label'), 'host has no aria-label')
+    container.remove()
+})
+
+test('preact: ariaLabel reads the app-rendered button after a swap', t => {
+    const container = document.createElement('div')
+    document.body.appendChild(container)
+    const view = (key:string) => html`
+        <${SubstrateButton.TAG} ariaLabel="Close">
+            <button key=${key}>x</button>
+        <//>
+    `
+    render(view('a'), container)
+    render(view('b'), container)
+    const el = container.querySelector(
+        SubstrateButton.TAG
+    ) as SubstrateButton
+    t.ok(!el.button!.hasAttribute('aria-label'),
+        'the replaced inner button has no label')
+    t.equal(el.ariaLabel, null,
+        'getter reads the replaced inner button, not the stored label')
+    t.ok(!el.hasAttribute('aria-label'), 'host has no aria-label')
+    container.remove()
+})
+
 test('all done', () => {
     // @ts-expect-error tests
     window.testsFinished = true

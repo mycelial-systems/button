@@ -15,22 +15,20 @@ export class SubstrateButton extends SubstrateButtonLight {
         define(SubstrateButton.TAG, SubstrateButton)
     }
 
-    connectedCallback ():void {
-        this.render()
-    }
-
     render () {
         if (this.querySelector('button')) return
         // Read directly from host attributes: the inner button does not
         // exist yet when render() first runs, so the getters (which
-        // read from the inner button) would return false.
+        // read from the inner button) would return false. ariaLabel is
+        // the exception: its getter falls back to the stored label,
+        // because the label has already moved off the host.
         const type = this.getAttribute('type')
         const tabindexAttr = this.getAttribute('tabindex')
         const tabindex = tabindexAttr ? parseInt(tabindexAttr) : 0
         const disabled = this.hasAttribute('disabled')
         const autofocus = this.hasAttribute('autofocus')
         const name = this.getAttribute('name')
-        const ariaLabel = this.getAttribute('aria-label')
+        const ariaLabel = this.ariaLabel
 
         const spinning = this.getAttribute('spinning') !== null
 
