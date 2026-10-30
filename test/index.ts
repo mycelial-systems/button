@@ -631,6 +631,18 @@ test('keeps the element classes when the host class changes', async t => {
     t.ok(btn.classList.contains('spinning'), 'keeps spinning')
 })
 
+test('a host class change never adds an element class', async t => {
+    document.body.innerHTML += `
+        <substrate-button id="class-owned-add">go</substrate-button>
+    `
+    const el = await waitFor('#class-owned-add') as SubstrateButton
+    el.setAttribute('class', 'spinning other')
+    const btn = el.button!
+    t.ok(!btn.classList.contains('spinning'),
+        'inner button does not gain spinning')
+    t.ok(btn.classList.contains('other'), 'inner button gains other')
+})
+
 test('updates the inner button when a Preact class prop changes', t => {
     const container = document.createElement('div')
     document.body.appendChild(container)
