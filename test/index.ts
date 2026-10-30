@@ -803,8 +803,10 @@ test('preact: ariaLabel reads the app-rendered button after a swap', t => {
     const el = container.querySelector(
         SubstrateButton.TAG
     ) as SubstrateButton
-    t.equal(el.ariaLabel, el.button!.getAttribute('aria-label'),
-        'getter matches the replaced inner button, which has no label')
+    t.ok(!el.button!.hasAttribute('aria-label'),
+        'the replaced inner button has no label')
+    t.equal(el.ariaLabel, null,
+        'getter reads the replaced inner button, not the stored label')
     t.ok(!el.hasAttribute('aria-label'), 'host has no aria-label')
     container.remove()
 })
