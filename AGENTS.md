@@ -43,6 +43,11 @@ rerun; do not kill the other process.
 For a release, verify that the manifest version advances the latest published
 version recorded in `CHANGELOG.md`. The manifest check is part of `npm test`.
 
+That check, `test/package-version.js`, compares `package.json` against a
+hardcoded version string; it does not read `CHANGELOG.md`. Bump the manifest
+and that literal together, or `npm test` fails. `CHANGELOG.md` is generated
+by `auto-changelog` in the `version` script, so never edit it by hand.
+
 ## Running the browser suite
 
 `tapout` serves on a fixed port (8123). If another worktree or project is
