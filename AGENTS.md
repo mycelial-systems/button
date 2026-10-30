@@ -34,9 +34,8 @@ the app-rendered hydration path when applicable.
 The public custom-element seam is `substrate-button` and its `button`
 property. Run the browser suite with `esbuild test/index.ts --bundle | tapout`;
 inspect inner-button attributes through `el.button` rather than rendered HTML.
-`tapout` always listens on port 8123, so a run fails with `EADDRINUSE`
-while another worktree's suite is running. Wait for the port to free and
-rerun; do not kill the other process.
+To check that a new assertion can fail, temporarily break the behavior in
+`src/`, confirm the suite reports `not ok`, then restore it.
 
 ## Release versioning
 
