@@ -48,3 +48,8 @@ version recorded in `CHANGELOG.md`. The manifest check is part of `npm test`.
 `tapout` serves on a fixed port (8123). If another worktree or project is
 running its suite, `tapout` fails with `EADDRINUSE`; wait for that run to
 finish instead of killing it.
+
+If npm blocks install scripts, `node_modules/lightningcss-cli/lightningcss`
+stays a text placeholder and `npm run build-css` fails with
+`This: command not found`. Run `node postinstall.js` inside
+`node_modules/lightningcss-cli` to link the platform binary.
