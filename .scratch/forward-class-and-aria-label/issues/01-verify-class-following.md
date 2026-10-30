@@ -31,18 +31,18 @@ Decisions to check, from `.scratch/forward-class-and-aria-label/spec.md`:
 forwarding and hydration tests), `src/html.ts` (`HANDLED_KEYS`
 includes `class`).
 
-**Status:** ready-for-agent
+**Status:** done
 
-- [ ] Adding a class to a rendered host adds it to `el.button`
-- [ ] Changing a rendered host's class removes the old token from
+- [x] Adding a class to a rendered host adds it to `el.button`
+- [x] Changing a rendered host's class removes the old token from
       `el.button` and adds the new one
-- [ ] On a spinning host, changing the host class leaves
+- [x] On a spinning host, changing the host class leaves
       `substrate-button`, `btn`, and `spinning` on `el.button`
-- [ ] A Preact `class` prop that changes between renders updates
+- [x] A Preact `class` prop that changes between renders updates
       `el.button` on a button the element rendered
-- [ ] A Preact `class` prop that changes between renders updates an
+- [x] A Preact `class` prop that changes between renders updates an
       app-rendered `el.button` and keeps the app's own classes
-- [ ] The first host class reaches an app-rendered `el.button` after
+- [x] The first host class reaches an app-rendered `el.button` after
       hydration
 - [x] `npm run lint` and `esbuild test/index.ts --bundle | tapout`
       pass after any change

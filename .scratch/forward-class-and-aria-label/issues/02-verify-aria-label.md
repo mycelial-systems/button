@@ -38,7 +38,7 @@ Decisions to check, from `.scratch/forward-class-and-aria-label/spec.md`:
 (`HANDLED_KEYS` includes `aria-label`), `test/index.ts` (aria-label
 and ariaLabel tests).
 
-**Status:** ready-for-agent
+**Status:** done
 
 - [x] A host `aria-label` present at upgrade ends up on `el.button` and
       the host has no `aria-label`
