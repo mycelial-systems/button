@@ -34,8 +34,6 @@ A button web component, with a visual "loading" state.
   * [pre-built](#pre-built)
 - [Example](#example)
   * [Attributes](#attributes)
-    + [Forwarded attributes](#forwarded-attributes)
-    + [Accessibility](#accessibility)
 
 <!-- tocstop -->
 
