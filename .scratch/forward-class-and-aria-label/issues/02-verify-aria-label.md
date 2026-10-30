@@ -40,23 +40,23 @@ and ariaLabel tests).
 
 **Status:** ready-for-agent
 
-- [ ] A host `aria-label` present at upgrade ends up on `el.button` and
+- [x] A host `aria-label` present at upgrade ends up on `el.button` and
       the host has no `aria-label`
-- [ ] A host `aria-label` set after upgrade ends up on `el.button` and
+- [x] A host `aria-label` set after upgrade ends up on `el.button` and
       the host has no `aria-label`
-- [ ] Setting `el.ariaLabel` names `el.button`, the getter reads it
+- [x] Setting `el.ariaLabel` names `el.button`, the getter reads it
       back, and the host has no `aria-label`
-- [ ] Setting `el.ariaLabel` to the empty string clears the label on
+- [x] Setting `el.ariaLabel` to the empty string clears the label on
       `el.button`
-- [ ] Setting `el.ariaLabel` to `null` clears the label on `el.button`
-- [ ] `ariaLabel` set before connect reaches the button the element
+- [x] Setting `el.ariaLabel` to `null` clears the label on `el.button`
+- [x] `ariaLabel` set before connect reaches the button the element
       builds
-- [ ] A Preact `ariaLabel` prop that changes and is then removed
+- [x] A Preact `ariaLabel` prop that changes and is then removed
       updates and then clears the label on `el.button`, and the host
       has no `aria-label`
-- [ ] A Preact `ariaLabel` prop names an app-rendered `el.button`
+- [x] A Preact `ariaLabel` prop names an app-rendered `el.button`
       after hydration, and the host has no `aria-label`
-- [ ] The app-rendered button swap test asserts the host has no
+- [x] The app-rendered button swap test asserts the host has no
       `aria-label`
-- [ ] `npm run lint` and `esbuild test/index.ts --bundle | tapout`
+- [x] `npm run lint` and `esbuild test/index.ts --bundle | tapout`
       pass after any change

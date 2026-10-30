@@ -44,5 +44,5 @@ includes `class`).
       app-rendered `el.button` and keeps the app's own classes
 - [ ] The first host class reaches an app-rendered `el.button` after
       hydration
-- [ ] `npm run lint` and `esbuild test/index.ts --bundle | tapout`
+- [x] `npm run lint` and `esbuild test/index.ts --bundle | tapout`
       pass after any change
