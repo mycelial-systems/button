@@ -162,10 +162,12 @@ export class SubstrateButton extends WebComponent.create('substrate-button') {
      * The inner button's accessible name. It lives only on the inner
      * button: `aria-label` on a host with no role fails axe. An empty
      * string means no label, because Preact sets a removed property
-     * prop to ''.
+     * prop to ''. Before the element has an inner button, this returns
+     * the label it was given.
      */
     get ariaLabel ():string|null {
-        return this.button?.getAttribute('aria-label') ?? this._ariaLabel
+        const btn = this.button
+        return btn ? btn.getAttribute('aria-label') : this._ariaLabel
     }
 
     set ariaLabel (value:string|null) {

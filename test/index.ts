@@ -769,6 +769,24 @@ test('preact: ariaLabel applies to an app-rendered button', t => {
     container.remove()
 })
 
+test('preact: ariaLabel reads the app-rendered button after a swap', t => {
+    const container = document.createElement('div')
+    document.body.appendChild(container)
+    const view = (key:string) => html`
+        <${SubstrateButton.TAG} ariaLabel="Close">
+            <button key=${key}>x</button>
+        <//>
+    `
+    render(view('a'), container)
+    render(view('b'), container)
+    const el = container.querySelector(
+        SubstrateButton.TAG
+    ) as SubstrateButton
+    t.equal(el.ariaLabel, el.button!.getAttribute('aria-label'),
+        'getter matches the replaced inner button, which has no label')
+    container.remove()
+})
+
 test('all done', () => {
     // @ts-expect-error tests
     window.testsFinished = true

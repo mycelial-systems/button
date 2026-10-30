@@ -253,7 +253,9 @@ are added to the inner button, and classes you remove are removed from it.
 The classes the element owns, `substrate-button`, `btn`, and `spinning`, are
 never added or removed by a host class change.
 On a button rendered by your app, the app owns the button's `class`. If the
-app changes that attribute, include any host classes it wants kept.
+app changes that attribute, include any host classes it wants kept. If the
+app replaces its button, the new button does not receive the host class or
+label again.
 
 #### Accessibility
 
@@ -261,14 +263,14 @@ The inner button uses native button semantics. It has no `role` or
 `aria-disabled`, and native `disabled` is the source of truth.
 
 `ariaLabel` names the inner button, and the host never carries an
-`aria-label`. A host `aria-label` attribute moves onto the inner button, and
-a later `setAttribute('aria-label', ...)` also moves. Keep it off the host:
-`aria-label` on an element with no role fails axe. Reading `el.ariaLabel`
-returns the inner button's label. Removing the host attribute later does
-nothing, because it is already gone. To clear the label, set
-`el.ariaLabel = null`. In Preact or another framework, pass `ariaLabel` as a
-property, not `aria-label` as an attribute. Removing the prop then clears the
-label.
+`aria-label`. A host `aria-label` attribute moves onto the inner button,
+and a later `setAttribute('aria-label', ...)` also moves. The element keeps
+it off the host, because `aria-label` on an element with no role fails axe.
+Reading `el.ariaLabel` returns the inner button's label. Removing the host
+attribute later does nothing, because it is already gone. To clear the
+label, set `el.ariaLabel = null`. In Preact or another framework, pass
+`ariaLabel` as a property, not `aria-label` as an attribute. Removing the
+prop then clears the label.
 
 ```js
 const el = document.querySelector('substrate-button')
