@@ -260,6 +260,20 @@ app changes that attribute, include any host classes it wants kept.
 The inner button uses native button semantics. It has no `role` or
 `aria-disabled`, and native `disabled` is the source of truth.
 
+`ariaLabel` names the inner button, and the host never carries an
+`aria-label`. A host `aria-label` attribute moves onto the inner button, and
+later changes follow it. Keep it off the host: `aria-label` on an element with
+no role fails axe.
+
+```js
+const el = document.querySelector('substrate-button')
+
+el.ariaLabel = 'Close the dialog'
+
+// An empty string or null removes the label
+el.ariaLabel = ''
+```
+
 `aria-live` is opt-in: set it on the `<substrate-button>` host when your app
 needs label changes announced. While the button is spinning, its inner button
 has `aria-busy="true"`.
