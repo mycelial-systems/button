@@ -29,12 +29,12 @@ The README must cover, per the spec:
 
 **Status:** ready-for-agent
 
-- [ ] README describes class following, owned classes, app-owned
+- [x] README describes class following, owned classes, app-owned
       button class, and the swapped-button limitation
-- [ ] README describes the `ariaLabel` property, that the host never
+- [x] README describes the `ariaLabel` property, that the host never
       carries `aria-label`, how to clear it, and the framework guidance
-- [ ] AGENTS.md notes that `class` and `aria-label` use
+- [x] AGENTS.md notes that `class` and `aria-label` use
       `handleChange_<name>` handlers rather than generic forwarding
-- [ ] `package.json` version advances the latest version recorded in
+- [x] `package.json` version advances the latest version recorded in
       `CHANGELOG.md`, and `node test/package-version.js` passes
-- [ ] `npm run lint` and `npm test` pass on the branch
+- [x] `npm run lint` and `npm test` pass on the branch
