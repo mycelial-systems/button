@@ -19,6 +19,11 @@ Single-context layout. See `docs/agents/domain.md`.
 mirroring and attributes supplied to the full renderer. A new forwarded
 attribute must also pass through `HANDLED_KEYS` in `src/html.ts`.
 
+An attribute that needs its own semantics (`class`, `aria-label`) gets a
+`handleChange_<name>` method instead; any such handler suppresses generic
+forwarding in `attributeChangedCallback`. Hydration of an app-rendered
+button happens in the light element's `connectedCallback`.
+
 Test forwarding at the public custom-element seam with
 `esbuild test/index.ts --bundle | tapout`; cover both a rendered button and
 the app-rendered hydration path when applicable.
