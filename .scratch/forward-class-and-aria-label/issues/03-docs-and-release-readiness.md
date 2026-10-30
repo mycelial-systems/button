@@ -27,7 +27,7 @@ The README must cover, per the spec:
 `AGENTS.md` (attribute forwarding note), `package.json` (`version`),
 `test/package-version.js`.
 
-**Status:** ready-for-agent
+**Status:** done
 
 - [x] README describes class following, owned classes, app-owned
       button class, and the swapped-button limitation
