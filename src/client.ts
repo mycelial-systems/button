@@ -324,6 +324,11 @@ export class SubstrateButton extends WebComponent.create('substrate-button') {
         // connected, so `handleChange_class` could not copy it then.
         // Copy it now. Adding a token twice is a no-op.
         this.handleChange_class(null, this.getAttribute('class'))
+        // Likewise, a framework can set ariaLabel before that button
+        // exists, so apply the stored label now.
+        if (this._ariaLabel !== null) {
+            this.button?.setAttribute('aria-label', this._ariaLabel)
+        }
     }
 
     render () {

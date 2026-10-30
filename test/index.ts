@@ -753,6 +753,22 @@ test('preact: ariaLabel prop names the inner button', t => {
     container.remove()
 })
 
+test('preact: ariaLabel applies to an app-rendered button', t => {
+    const container = document.createElement('div')
+    document.body.appendChild(container)
+    render(html`
+        <${SubstrateButton.TAG} ariaLabel="Close">
+            <button>x</button>
+        <//>
+    `, container)
+    const btn = container.querySelector('button')!
+    t.equal(btn.getAttribute('aria-label'), 'Close',
+        'app-rendered inner button has the label')
+    const host = container.querySelector('substrate-button')!
+    t.ok(!host.hasAttribute('aria-label'), 'host has no aria-label')
+    container.remove()
+})
+
 test('all done', () => {
     // @ts-expect-error tests
     window.testsFinished = true
