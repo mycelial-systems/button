@@ -262,8 +262,13 @@ The inner button uses native button semantics. It has no `role` or
 
 `ariaLabel` names the inner button, and the host never carries an
 `aria-label`. A host `aria-label` attribute moves onto the inner button, and
-later changes follow it. Keep it off the host: `aria-label` on an element with
-no role fails axe.
+a later `setAttribute('aria-label', ...)` also moves. Keep it off the host:
+`aria-label` on an element with no role fails axe. Reading `el.ariaLabel`
+returns the inner button's label. Removing the host attribute later does
+nothing, because it is already gone. To clear the label, set
+`el.ariaLabel = null`. In Preact or another framework, pass `ariaLabel` as a
+property, not `aria-label` as an attribute. Removing the prop then clears the
+label.
 
 ```js
 const el = document.querySelector('substrate-button')
