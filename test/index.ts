@@ -660,6 +660,7 @@ test('hydrates a host class change onto an app-rendered button', t => {
     const btn = container.querySelector('button')!
     t.ok(btn.classList.contains('mine'), 'keeps the app-rendered class')
     t.ok(btn.classList.contains('b'), 'has the new host class')
+    t.ok(!btn.classList.contains('a'), 'drops the old host class')
     container.remove()
 })
 

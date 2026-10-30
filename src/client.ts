@@ -261,6 +261,12 @@ export class SubstrateButton extends WebComponent.create('substrate-button') {
         }
     }
 
+    /**
+     * Apply the difference between the old and new host class lists to
+     * the inner button. Before the button exists this does nothing,
+     * because the full render() copies the host class when it builds
+     * the button.
+     */
     handleChange_class (oldValue:string|null, newValue:string|null) {
         const btn = this.button
         if (!btn) return

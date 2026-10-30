@@ -252,6 +252,8 @@ rendered by your app before the element hydrates. Classes you add to the host
 are added to the inner button, and classes you remove are removed from it.
 The classes the element owns, `substrate-button`, `btn`, and `spinning`, are
 never added or removed by a host class change.
+On a button rendered by your app, the app owns the button's `class`. If the
+app changes that attribute, include any host classes it wants kept.
 
 #### Accessibility
 
