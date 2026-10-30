@@ -15,7 +15,7 @@ export type Attrs = {
 
 const HANDLED_KEYS = new Set([
     'class', 'type', 'name', 'tabindex', 'role',
-    'aria-label', 'aria-live', 'disabled', 'autofocus'
+    'aria-label', 'disabled', 'autofocus'
 ])
 
 function escapeAttr (v:string):string {
@@ -53,9 +53,7 @@ export function html (attrs:Partial<Attrs>, textContent:string) {
         type ? `type="${escapeAttr(type)}"` : '',
         name ? `name="${escapeAttr(name)}"` : '',
         tabindex ? `tabindex="${tabindex}"` : 'tabindex="0"',
-        'role="button"',
         ariaLabel ? `aria-label="${escapeAttr(ariaLabel)}"` : '',
-        'aria-live="polite"',
         extraStr,
     ]).filter(Boolean).join(' ')
 

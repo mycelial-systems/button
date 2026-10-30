@@ -25,7 +25,26 @@ export const FORWARDED_ATTRS = [
     'popovertarget',
     'popovertargetaction',
     'title',
+    'aria-live',
 ] as const
+
+/**
+ * Classes the element manages on the inner <button> itself. A change to
+ * the host's `class` never adds or removes these.
+ */
+export const OWNED_CLASSES = [
+    'substrate-button',
+    'btn',
+    'spinning',
+] as const
+
+function classTokens (value:string|null):string[] {
+    return (value ?? '').split(/\s+/).filter(Boolean)
+}
+
+function isOwnedClass (token:string):boolean {
+    return (OWNED_CLASSES as readonly string[]).includes(token)
+}
 
 /**
  * This is the lightweight version for browsers.
@@ -39,11 +58,14 @@ export class SubstrateButton extends WebComponent.create('substrate-button') {
         'autofocus',
         'disabled',
         'spinning',
+        'class',
+        'aria-label',
         ...FORWARDED_ATTRS,
     ]
 
     static TAG = 'substrate-button'
     _isSpinning:boolean
+    _ariaLabel:string|null = null
 
     static define () {
         define(SubstrateButton.TAG, SubstrateButton)
@@ -80,7 +102,6 @@ export class SubstrateButton extends WebComponent.create('substrate-button') {
             'disabled',
             disabledValue || this.hasAttribute('spinning')
         )
-        this.button?.setAttribute('aria-disabled', String(disabledValue))
     }
 
     get type ():string|null {
@@ -135,6 +156,31 @@ export class SubstrateButton extends WebComponent.create('substrate-button') {
             this.toggleAttribute('autofocus', value)
         }
         this.button?.toggleAttribute('autofocus', value)
+    }
+
+    /**
+     * The inner button's accessible name. It lives only on the inner
+     * button: `aria-label` on a host with no role fails axe. An empty
+     * string means no label, because Preact sets a removed property
+     * prop to ''. Before the element has an inner button, this returns
+     * the label it was given.
+     */
+    get ariaLabel ():string|null {
+        const btn = this.button
+        return btn ? btn.getAttribute('aria-label') : this._ariaLabel
+    }
+
+    set ariaLabel (value:string|null) {
+        const label = value || null
+        this._ariaLabel = label
+        if (label === null) {
+            this.button?.removeAttribute('aria-label')
+        } else {
+            this.button?.setAttribute('aria-label', label)
+        }
+        if (this.hasAttribute('aria-label')) {
+            this.removeAttribute('aria-label')
+        }
     }
 
     /**
@@ -222,7 +268,6 @@ export class SubstrateButton extends WebComponent.create('substrate-button') {
             'disabled',
             isDisabled || this.hasAttribute('spinning')
         )
-        this.button?.setAttribute('aria-disabled', String(isDisabled))
     }
 
     handleChange_spinning (_, newValue:boolean) {
@@ -243,10 +288,49 @@ export class SubstrateButton extends WebComponent.create('substrate-button') {
         }
     }
 
+    /**
+     * Apply the difference between the old and new host class lists to
+     * the inner button. Before the button exists this does nothing,
+     * because the full render() copies the host class when it builds
+     * the button.
+     */
+    handleChange_class (oldValue:string|null, newValue:string|null) {
+        const btn = this.button
+        if (!btn) return
+        const before = classTokens(oldValue)
+        const after = classTokens(newValue)
+        for (const token of before) {
+            if (after.includes(token) || isOwnedClass(token)) continue
+            btn.classList.remove(token)
+        }
+        for (const token of after) {
+            if (before.includes(token) || isOwnedClass(token)) continue
+            btn.classList.add(token)
+        }
+    }
+
+    /**
+     * Move a host `aria-label` onto the inner button. The setter removes
+     * the host attribute, which calls this again with null; that call
+     * does nothing.
+     */
+    'handleChange_aria-label' (_old:string|null, newValue:string|null) {
+        if (newValue !== null) this.ariaLabel = newValue
+    }
+
     connectedCallback () {
         // The inner element is a native <button>, so the browser
         // already handles Enter and Space. No keyboard handlers needed.
         this.render()
+        // Preact sets the host class before the app's button is
+        // connected, so `handleChange_class` could not copy it then.
+        // Copy it now. Adding a token twice is a no-op.
+        this.handleChange_class(null, this.getAttribute('class'))
+        // Likewise, a framework can set ariaLabel before that button
+        // exists, so apply the stored label now.
+        if (this._ariaLabel !== null) {
+            this.button?.setAttribute('aria-label', this._ariaLabel)
+        }
     }
 
     render () {

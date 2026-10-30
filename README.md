@@ -34,6 +34,8 @@ A button web component, with a visual "loading" state.
   * [pre-built](#pre-built)
 - [Example](#example)
   * [Attributes](#attributes)
+    + [Forwarded attributes](#forwarded-attributes)
+    + [Accessibility](#accessibility)
 
 <!-- tocstop -->
 
@@ -234,6 +236,87 @@ See the example in [./example](./example/).
 ```
 
 ### Attributes
+
+#### Forwarded attributes
+
+The host forwards these attributes to its inner native `<button>` and keeps
+them in sync when they change: `type`, `name`, `value`, `form`, `formaction`,
+`formenctype`, `formmethod`, `formnovalidate`, `formtarget`,
+`popovertarget`, `popovertargetaction`, `title`, and `aria-live`.
+
+Set `aria-live` on the `<substrate-button>` host only when your app needs
+label changes announced.
+
+The host's `class` also follows onto the inner button, including a button
+rendered by your app before the element hydrates. Classes you add to the host
+are added to the inner button, and classes you remove are removed from it.
+The classes the element owns, `substrate-button`, `btn`, and `spinning`, are
+never added or removed by a host class change.
+On a button rendered by your app, the app owns the button's `class`. If the
+app changes that attribute, include any host classes it wants kept. If the
+app replaces its button, the new button does not receive the host class or
+label again.
+
+#### Accessibility
+
+The inner button uses native button semantics. It has no `role` or
+`aria-disabled`, and native `disabled` is the source of truth.
+
+`ariaLabel` names the inner button, and the host never carries an
+`aria-label`. A host `aria-label` attribute moves onto the inner button,
+and a later `setAttribute('aria-label', ...)` also moves. The element keeps
+it off the host, because `aria-label` on an element with no role fails axe.
+Reading `el.ariaLabel` returns the inner button's label. Removing the host
+attribute later does nothing, because it is already gone. To clear the
+label, set `el.ariaLabel = null`. In Preact or another framework, pass
+`ariaLabel` as a property, not `aria-label` as an attribute. Removing the
+prop then clears the label.
+
+```js
+const el = document.querySelector('substrate-button')
+
+el.ariaLabel = 'Close the dialog'
+
+// An empty string or null removes the label
+el.ariaLabel = ''
+```
+
+`aria-live` is opt-in: set it on the `<substrate-button>` host when your app
+needs label changes announced. While the button is spinning, its inner button
+has `aria-busy="true"`.
+
+Upgrade note: if your app relied on the previous default `aria-live` value,
+set `aria-live` on the host to restore it.
+
+##### Announce loading in a status region
+
+The button does not announce loading on its own. Render one `role="status"`
+element in the app, keep it in the DOM, and update its text as the operation
+starts and ends. It may use the app's visually hidden class.
+
+```html
+<substrate-button id="save-button">Save</substrate-button>
+<p id="save-status" role="status" class="visually-hidden"></p>
+```
+
+```js
+const button = document.querySelector('#save-button')
+const status = document.querySelector('#save-status')
+
+async function saveWithAnnouncement () {
+  button.spinning = true
+  status.textContent = 'Saving'
+
+  await save()
+
+  button.spinning = false
+  status.textContent = 'Saved'
+}
+```
+
+Putting the message in a separate region makes the announcement reliable:
+the status element exists before its text changes, and the announcement does
+not depend on which element has focus.
 
 #### spinning
 
